@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<title>UNIST 마작 소모임 ±0</title>
+<meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+
+<body>
+  <div w3-include-html="menubar.html"></div>
+
+	<div class="w3-main" style="margin-left:200px">
+		<div class="w3-card" style="background-color: #001c54; color: white" scrolling="NO">
+			<button class="w3-button w3-xlarge w3-hide-large" onclick="w3_open()">&#9776;</button>
+			<div class="w3-container">
+				<h1>통계</h1>
+			</div>
+		</div>
+		<div class="w3-container" style="width: fit-content; margin-top: 10px;">
+			<table id="myTable" class="w3-table-all">
+				<tr>
+					<td nowrap>전체 순위 반영 대상 대국수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+
+				</tr>
+				<tr>
+					<td nowrap>들통</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>최고 점수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+			</table>
+		</div>
+		<div class="w3-container" style="width: fit-content; margin-top: 10px;">
+			<table id="myTable" class="w3-table-all">
+				<tr>
+					<td nowrap>동가 우승</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>남가 우승</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>서가 우승</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>북가 우승</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+			</table>
+		</div>
+		<div class="w3-container" style="width: fit-content; margin-top: 10px;">
+			<table id="myTable" class="w3-table-all">
+				<tr>
+					<td nowrap>동가 4위</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>남가 4위</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>서가 4위</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>북가 4위</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+			</table>
+		</div>
+		<div class="w3-container" style="width: fit-content; margin-top: 10px;">
+			<table id="myTable" class="w3-table-all">
+				<tr>
+					<td nowrap>동가 평균 점수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>남가 평균 점수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>서가 평균 점수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+				<tr>
+					<td nowrap>북가 평균 점수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<script src="w3.js"></script>
+	<script>
+		w3.includeHTML();
+		function w3_open() {
+				document.getElementById("mySidebar").style.display = "block";
+		}
+		function w3_close() {
+				document.getElementById("mySidebar").style.display = "none";
+		}
+	</script>
+	</body>
+</html>

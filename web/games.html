@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<title>UNIST 마작 소모임 ±0</title>
+<meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+
+<body>
+	<div w3-include-html="menubar.html"></div>
+	<div class="w3-main" style="margin-left:200px">
+		<div class="w3-card" style="background-color: #001c54; color: white" scrolling="NO">
+			<button class="w3-button w3-xlarge w3-hide-large" onclick="w3_open()">&#9776;</button>
+			<div class="w3-container">
+				<h1>경기 기록</h1>
+			</div>
+		</div>
+		<div style="overflow-x:auto;">
+			<table id="mainTable" class="w3-table-all">
+				<tr style="background-color: #43c1c3; color: white;">
+					<th nowrap>일시</th>
+					<th nowrap style="border-left: 1px solid black; margin-right: 5px;"></th>
+					<th nowrap>1위</th>
+					<th nowrap>2위</th>
+					<th nowrap>3위</th>
+					<th nowrap>4위</th>
+					<th nowrap style="border-left: 1px solid black; margin-right: 5px;"></th>
+					<th nowrap>공탁점</th>
+					<th nowrap style="border-left: 1px solid black; margin-right: 5px;"></th>
+					<th nowrap>도라 갯수</th>
+					<th nowrap style="border-left: 1px solid black; margin-right: 5px;"></th>
+					<th nowrap>비고</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<script src="w3.js"></script>
+	<script>
+		w3.includeHTML();
+		function w3_open() {
+			document.getElementById("mySidebar").style.display = "block";
+		}
+
+		function w3_close() {
+			document.getElementById("mySidebar").style.display = "none";
+		}
+
+		window.onload = async function () {
+			var url = window.location.href.replace(/^.*games.html/, "http://localhost:8888/games");
+			const response = await fetch(url);
+			var json_data = await response.json();
+
+			var table = document.getElementById("mainTable");
+
+			json_data.forEach(data_row => {
+				var row = table.insertRow();
+
+				var time = row.insertCell();
+				row.insertCell();
+				var first = row.insertCell();
+				var second = row.insertCell();
+				var third = row.insertCell();
+				var fourth = row.insertCell();
+				row.insertCell();
+				var leftover = row.insertCell();
+				row.insertCell();
+				var dora = row.insertCell();
+				row.insertCell();
+				var remarks = row.insertCell();
+
+				time.innerHTML = data_row['recorded_at'];
+				first.innerHTML = data_row['first'];
+				second.innerHTML = data_row['second'];
+				third.innerHTML = data_row['third'];
+				fourth.innerHTML = data_row['fourth'];
+				leftover.innerHTML = data_row['leftover_score'];
+				dora.innerHTML = data_row['used_dora_count'];
+				remarks.innerHTML = data_row['remarks'];
+			});
+		}
+	</script>
+</body>
+
+</html>

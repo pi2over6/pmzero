@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<title>UNIST 마작 소모임 ±0</title>
+<meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+
+<body>
+	<div w3-include-html="menubar.html"></div>
+
+	<div class="w3-main" style="margin-left:200px">
+		<div class="w3-card" style="background-color: #001c54; color: white" scrolling="NO">
+			<button class="w3-button w3-xlarge w3-hide-large" onclick="w3_open()">&#9776;</button>
+			<div class="w3-container">
+				<h1>조건 지정</h1>
+			</div>
+		</div>
+
+		<form method="GET" action="games.html">
+			<div style="margin-top:10px; margin-left:10px; margin-right:10px;">
+				<input type="checkbox" id="date" name="date"><b> 기간 지정 </b>
+				<br>
+				<input type="date" id="start" name="start" style="margin-top: 3px;">
+				~ <input type="date" id="end" name="end"> <br>
+				<br>
+				<input type="checkbox" id="ind" name="ind" style="margin-top: 30px;"><b> 개인 전적: </b>
+				<select id="this_member" name="this_member" style="margin-left:10px; width:100px;">
+					<option disabled selected> --- </option>
+				</select>
+				<br>
+				<input type="checkbox" id="vs" name="vs" style="margin-top: 30px;"><b> 상대 전적: </b>
+				<select id="opponent" name="opponent" style="margin-left:10px; width:100px;">
+					<option disabled selected> --- </option>
+				</select>
+				<br>
+				<input type="submit" value="검색" style="margin-top: 20px;">
+			</div>
+		</form>
+	</div>
+
+	<script src="w3.js"></script>
+	<script>
+		w3.includeHTML();
+
+		window.onload = async function () {
+			document.getElementById('start').value = "2014-04-05";
+			document.getElementById('end').valueAsDate = new Date();
+			const response = await fetch('http://localhost:8888/members');
+			var json_data = await response.json();
+
+			var this_member = document.getElementById('this_member');
+
+			json_data.forEach(member => {
+				var option = document.createElement('option');
+				option.value = member;
+				option.innerHTML = member;
+				this_member.appendChild(option);
+			});
+
+			var opponent = document.getElementById('opponent');
+
+			json_data.forEach(member => {
+				var option = document.createElement('option');
+				option.value = member;
+				option.innerHTML = member;
+				opponent.appendChild(option);
+			});
+		}
+
+		function w3_open() {
+			document.getElementById("mySidebar").style.display = "block";
+		}
+
+		function w3_close() {
+			document.getElementById("mySidebar").style.display = "none";
+		}
+	</script>
+</body>
+
+</html>
