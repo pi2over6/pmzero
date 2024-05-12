@@ -2,7 +2,7 @@
 <html>
 <title>UNIST 마작 소모임 ±0</title>
 <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <body>
     <div w3-include-html="menubar.html"></div>
@@ -36,7 +36,7 @@
             </table>
         </div>
     </div>
-    <script src="w3.js"></script>
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script>
         w3.includeHTML();
         function w3_open() {
@@ -47,8 +47,7 @@
         }
 
         window.onload = async function () {
-			var url = window.location.href.replace(/^.*ranking.html/, "http://localhost:8888/ranking");
-			const response = await fetch(url);
+            const response = await fetch(window.location.href.replace(".html", ""));
             var json_data = await response.json();
 
             var table = document.getElementById("mainTable");
@@ -87,6 +86,21 @@
                 second_ratio.innerHTML = data_row['second_ratio'];
                 third_ratio.innerHTML = data_row['third_ratio'];
                 fourth_ratio.innerHTML = data_row['fourth_ratio'];
+
+                rank.noWrap = true;
+                name.noWrap = true;
+                point.noWrap = true;
+                point_avg.noWrap = true;
+                games.noWrap = true;
+                first.noWrap = true;
+                second.noWrap = true;
+                third.noWrap = true;
+                fourth.noWrap = true;
+                rank_avg.noWrap = true;
+                first_ratio.noWrap = true;
+                second_ratio.noWrap = true;
+                third_ratio.noWrap = true;
+                fourth_ratio.noWrap = true;
             });
         }
 

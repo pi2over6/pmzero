@@ -1,0 +1,18 @@
+[Unit]
+Description=Simple web server for recording mahjong game results.
+
+[Service]
+User=root
+Group=root
+Type=simple
+Restart=on-failure
+RestartSec=5
+ExecStart=/usr/local/bin/pmzero
+Environment="WEB_PATH=/usr/share/pmzero/"
+Environment="LISTEN=0.0.0.0:80"
+Environment="GAMES_PATH=/usr/share/pmzero/games.json"
+Environment="MEMBERS_PATH=/usr/share/pmzero/members.json"
+
+
+[Install]
+WantedBy=multi-user.target

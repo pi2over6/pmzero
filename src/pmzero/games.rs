@@ -2,13 +2,14 @@ use super::{db, members};
 pub use db::Game;
 
 use chrono::NaiveDate;
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
+use std::error::Error;
 
 pub fn games_filtered(game_filter: HashMap<String, String>) -> Result<Vec<Game>, Box<dyn Error>> {
     let mut games = db::load_games()?;
 
     if game_filter.contains_key("ranking") && game_filter["ranking"] == "true" {
-        games.retain(|game| game.non_rank_game);
+        games.retain(|game| !game.non_rank_game);
     }
 
     if game_filter.contains_key("date") && game_filter["date"] == "on" {

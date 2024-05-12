@@ -1,7 +1,7 @@
 use super::db;
-use std::error::Error;
-
 pub use db::Members;
+
+use std::error::Error;
 
 pub fn members() -> Result<Members, Box<dyn Error>> {
     db::load_members()

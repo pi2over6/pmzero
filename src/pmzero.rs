@@ -16,6 +16,10 @@ pub fn get_ranking(game_filter: HashMap<String, String>) -> Result<String, Box<d
     let mut game_filter_ranking = game_filter.clone();
     game_filter_ranking.insert(String::from("ranking"), String::from("true"));
 
+    for (key, value) in &game_filter_ranking {
+        println!("filter key: {}, value: {}", key, value);
+    }
+
     let games = games::games_filtered(game_filter_ranking)?;
     let members = members::members()?;
     let mut stats: HashMap<UserID, Stat> = Default::default();

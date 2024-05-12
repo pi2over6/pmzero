@@ -8,7 +8,12 @@ use actix_web::{
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let app = || {
+    let path = std::env::var("WEB_PATH").unwrap_or(String::from("web/"));
+    let listen = std::env::var("LISTEN").unwrap_or(String::from("localhost:8888"));
+
+    println!("path: {}, listen: {}", path, listen);
+
+    let app = move || {
         actix_web::App::new()
             .service(index)
             .service(ranking)
@@ -16,10 +21,10 @@ async fn main() -> std::io::Result<()> {
             .service(members)
             .service(new_game)
             .service(new_member)
-            .service(actix_files::Files::new("/", "web/"))
+            .service(actix_files::Files::new("/", path.clone()))
     };
 
-    HttpServer::new(app).bind(("0.0.0.0", 8888))?.run().await
+    HttpServer::new(app).bind(listen)?.run().await
 }
 
 #[get("/")]

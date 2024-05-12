@@ -2,7 +2,7 @@
 <html>
 <title>UNIST 마작 소모임 ±0</title>
 <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <body>
 	<div w3-include-html="menubar.html"></div>
@@ -32,7 +32,7 @@
 			</table>
 		</div>
 	</div>
-	<script src="w3.js"></script>
+	<script src="https://www.w3schools.com/lib/w3.js"></script>
 	<script>
 		w3.includeHTML();
 		function w3_open() {
@@ -44,8 +44,7 @@
 		}
 
 		window.onload = async function () {
-			var url = window.location.href.replace(/^.*games.html/, "http://localhost:8888/games");
-			const response = await fetch(url);
+			const response = await fetch(window.location.href.replace(".html", ""));
 			var json_data = await response.json();
 
 			var table = document.getElementById("mainTable");
@@ -74,6 +73,15 @@
 				leftover.innerHTML = data_row['leftover_score'];
 				dora.innerHTML = data_row['used_dora_count'];
 				remarks.innerHTML = data_row['remarks'];
+
+				time.noWrap = true;
+				first.noWrap = true;
+				second.noWrap = true;
+				third.noWrap = true;
+				fourth.noWrap = true;
+				leftover.noWrap = true;
+				dora.noWrap = true;
+				remarks.noWrap = true;
 			});
 		}
 	</script>
