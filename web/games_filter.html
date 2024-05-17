@@ -44,7 +44,7 @@
 		window.onload = async function () {
 			document.getElementById('start').value = "2014-04-05";
 			document.getElementById('end').valueAsDate = new Date();
-			const response = await fetch(window.location.href.replace(".html", ""));
+			const response = await fetch(window.location.href.replace("games_filter.html", "members"));
 			var json_data = await response.json();
 
 			var this_member = document.getElementById('this_member');
