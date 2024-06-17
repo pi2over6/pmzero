@@ -29,6 +29,8 @@ pub fn games_filtered(game_filter: HashMap<String, String>) -> Result<Vec<Game>,
         games.retain(|game| game.member_in_game(&opponent_id));
     }
 
+    games.reverse();
+
     Ok(games)
 }
 

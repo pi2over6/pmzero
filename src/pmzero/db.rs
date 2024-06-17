@@ -4,8 +4,7 @@ use std::error::Error;
 pub type Members = HashMap<usize, String>;
 
 pub fn load_games() -> Result<Vec<Game>, Box<dyn Error>> {
-    let mut games: Vec<Game> = serde_json::from_str(&std::fs::read_to_string(get_games_path())?)?;
-    games.reverse();
+    let games: Vec<Game> = serde_json::from_str(&std::fs::read_to_string(get_games_path())?)?;
     Ok(games)
 }
 
