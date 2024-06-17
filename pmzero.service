@@ -8,11 +8,10 @@ Type=simple
 Restart=on-failure
 RestartSec=5
 ExecStart=/usr/local/bin/pmzero
-Environment="WEB_PATH=/usr/share/pmzero/"
 Environment="LISTEN=0.0.0.0:80"
-Environment="GAMES_PATH=/usr/share/pmzero/games.json"
-Environment="MEMBERS_PATH=/usr/share/pmzero/members.json"
-
+Environment="GAMES_PATH=/usr/share/pmzero_db/games.json"
+Environment="MEMBERS_PATH=/usr/share/pmzero_db/members.json"
+Environment="WEB_PATH=/usr/share/pmzero/"
 
 [Install]
 WantedBy=multi-user.target
