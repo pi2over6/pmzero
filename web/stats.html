@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <body>
-  <div w3-include-html="menubar.html"></div>
+	<div w3-include-html="menubar.html"></div>
 
 	<div class="w3-main" style="margin-left:200px">
 		<div class="w3-card" style="background-color: #001c54; color: white" scrolling="NO">
@@ -19,18 +19,23 @@
 				<tr>
 					<td nowrap>전체 순위 반영 대상 대국수</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.game_count }}</td>
 
 				</tr>
 				<tr>
 					<td nowrap>들통</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.bankrupt }}</td>
+				</tr>
+				<tr>
+					<td nowrap>최저 점수</td>
+					<td nowrap style="border-left: 1px solid black;"></td>
+					<td nowrap>{{ stats.lowest_score }}</td>
 				</tr>
 				<tr>
 					<td nowrap>최고 점수</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.highest_score }}</td>
 				</tr>
 			</table>
 		</div>
@@ -39,22 +44,22 @@
 				<tr>
 					<td nowrap>동가 우승</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.wins_east }}</td>
 				</tr>
 				<tr>
 					<td nowrap>남가 우승</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.wins_south }}</td>
 				</tr>
 				<tr>
 					<td nowrap>서가 우승</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.wins_west }}</td>
 				</tr>
 				<tr>
 					<td nowrap>북가 우승</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.wins_north }}</td>
 				</tr>
 			</table>
 		</div>
@@ -63,22 +68,22 @@
 				<tr>
 					<td nowrap>동가 4위</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.lasts_east }}</td>
 				</tr>
 				<tr>
 					<td nowrap>남가 4위</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.lasts_south }}</td>
 				</tr>
 				<tr>
 					<td nowrap>서가 4위</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.lasts_west }}</td>
 				</tr>
 				<tr>
 					<td nowrap>북가 4위</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.lasts_north }}</td>
 				</tr>
 			</table>
 		</div>
@@ -87,22 +92,22 @@
 				<tr>
 					<td nowrap>동가 평균 점수</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.average_score_east }}</td>
 				</tr>
 				<tr>
 					<td nowrap>남가 평균 점수</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.average_score_south }}</td>
 				</tr>
 				<tr>
 					<td nowrap>서가 평균 점수</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.average_score_west }}</td>
 				</tr>
 				<tr>
 					<td nowrap>북가 평균 점수</td>
 					<td nowrap style="border-left: 1px solid black;"></td>
-					<td nowrap></td>
+					<td nowrap>{{ stats.average_score_north }}</td>
 				</tr>
 			</table>
 		</div>
@@ -111,11 +116,12 @@
 	<script>
 		w3.includeHTML();
 		function w3_open() {
-				document.getElementById("mySidebar").style.display = "block";
+			document.getElementById("mySidebar").style.display = "block";
 		}
 		function w3_close() {
-				document.getElementById("mySidebar").style.display = "none";
+			document.getElementById("mySidebar").style.display = "none";
 		}
 	</script>
-	</body>
+</body>
+
 </html>

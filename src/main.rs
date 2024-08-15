@@ -2,9 +2,24 @@ mod pmzero;
 
 use std::collections::HashMap;
 
-use actix_web::{
-    get, http::header::ContentType, post, web, HttpResponse, HttpServer, Responder
-};
+use actix_web::{get, post, routes, web, HttpResponse, HttpServer, Responder};
+
+use lazy_static::lazy_static;
+use tera::Tera;
+
+lazy_static! {
+    pub static ref TERA: Tera = {
+        let mut tera = match Tera::new("web/*.html") {
+            Ok(t) => t,
+            Err(e) => {
+                println!("Parsing error(s): {}", e);
+                ::std::process::exit(1);
+            }
+        };
+        tera.autoescape_on(vec![".html", ".sql"]);
+        tera
+    };
+}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -15,56 +30,83 @@ async fn main() -> std::io::Result<()> {
 
     let app = move || {
         actix_web::App::new()
-            .service(index)
-            .service(ranking)
             .service(games)
-            .service(members)
+            .service(games_filter)
+            .service(ranking)
+            .service(ranking_filter)
+            .service(new_game_form)
             .service(new_game)
             .service(new_member)
+            .service(stats)
             .service(actix_files::Files::new("/", path.clone()))
     };
 
     HttpServer::new(app).bind(listen)?.run().await
 }
 
+#[routes]
 #[get("/")]
-async fn index() -> impl Responder {
-    web::Redirect::to("/ranking.html").permanent()
-}
-
 #[get("/ranking")]
 async fn ranking(web::Query(filter): web::Query<HashMap<String, String>>) -> impl Responder {
-    let result = pmzero::get_ranking(filter);
-    match result {
-        Ok(ranking) => HttpResponse::Ok()
-            .content_type(ContentType::json())
-            .body(ranking),
+    let ranking = pmzero::get_ranking(filter).unwrap_or(vec![]);
+
+    let mut ctx = tera::Context::new();
+    ctx.insert("ranking", &ranking);
+
+    match TERA.render("ranking.html", &ctx) {
+        Ok(html) => HttpResponse::Ok().body(html),
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
 
 #[get("/games")]
 async fn games(web::Query(filter): web::Query<HashMap<String, String>>) -> impl Responder {
-    let result = pmzero::get_games(filter);
-    match result {
-        Ok(games) => HttpResponse::Ok()
-            .content_type(ContentType::json())
-            .body(games),
-        Err(e) => {
-            if let Some(_) = e.downcast_ref::<chrono::format::ParseError>() {
-                HttpResponse::BadRequest().body(e.to_string())
-            } else {
-                HttpResponse::InternalServerError().body(e.to_string())
-            }
-        }
+    let games = pmzero::get_games(filter).unwrap_or(vec![]);
+
+    let mut ctx = tera::Context::new();
+    ctx.insert("games", &games);
+
+    match TERA.render("games.html", &ctx) {
+        Ok(html) => HttpResponse::Ok().body(html),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
 
-#[get("/members")]
-async fn members() -> impl Responder {
-    let result = pmzero::get_members();
-    match result {
-        Ok(members) => HttpResponse::Ok().content_type(ContentType::json()).body(members),
+#[get("/games_filter")]
+async fn games_filter() -> impl Responder {
+    let members = pmzero::get_members().unwrap_or(vec![]);
+
+    let mut ctx = tera::Context::new();
+    ctx.insert("members", &members);
+
+    match TERA.render("games_filter.html", &ctx) {
+        Ok(html) => HttpResponse::Ok().body(html),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+#[get("/ranking_filter")]
+async fn ranking_filter() -> impl Responder {
+    let members = pmzero::get_members().unwrap_or(vec![]);
+
+    let mut ctx = tera::Context::new();
+    ctx.insert("members", &members);
+
+    match TERA.render("ranking_filter.html", &ctx) {
+        Ok(html) => HttpResponse::Ok().body(html),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+#[get("/new_game")]
+async fn new_game_form() -> impl Responder {
+    let members = pmzero::get_members().unwrap_or(vec![]);
+
+    let mut ctx = tera::Context::new();
+    ctx.insert("members", &members);
+
+    match TERA.render("newgame.html", &ctx) {
+        Ok(html) => HttpResponse::Ok().body(html),
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
@@ -89,9 +131,13 @@ async fn new_member(info: web::Form<HashMap<String, String>>) -> impl Responder 
 
 #[get("/stats")]
 async fn stats() -> impl Responder {
-    let result = pmzero::stats();
-    match result {
-        Ok(body) => HttpResponse::Ok().content_type(ContentType::json()).body(body),
-        Err(e) => panic!("{}", e),
+    let stats = pmzero::stats().unwrap_or(HashMap::new());
+
+    let mut ctx = tera::Context::new();
+    ctx.insert("stats", &stats);
+
+    match TERA.render("stats.html", &ctx) {
+        Ok(html) => HttpResponse::Ok().body(html),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }

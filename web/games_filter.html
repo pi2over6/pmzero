@@ -15,21 +15,27 @@
 			</div>
 		</div>
 
-		<form method="GET" action="games.html">
+		<form method="GET" action="games">
 			<div style="margin-top:10px; margin-left:10px; margin-right:10px;">
 				<input type="checkbox" id="date" name="date"><b> 기간 지정 </b>
 				<br>
-				<input type="date" id="start" name="start" style="margin-top: 3px;">
-				~ <input type="date" id="end" name="end"> <br>
+				<input type="date" id="start" name="start" style="margin-top: 3px;" value="2014-04-05">
+				~ <input type="date" id="end" name="end" value="{{now() | date(format='%Y-%m-%d')}}"> <br>
 				<br>
 				<input type="checkbox" id="ind" name="ind" style="margin-top: 30px;"><b> 개인 전적: </b>
 				<select id="this_member" name="this_member" style="margin-left:10px; width:100px;">
 					<option disabled selected> --- </option>
+					{% for member in members %}
+					<option> {{member}} </option>
+					{% endfor %}
 				</select>
 				<br>
 				<input type="checkbox" id="vs" name="vs" style="margin-top: 30px;"><b> 상대 전적: </b>
 				<select id="opponent" name="opponent" style="margin-left:10px; width:100px;">
 					<option disabled selected> --- </option>
+					{% for member in members %}
+					<option> {{member}} </option>
+					{% endfor %}
 				</select>
 				<br>
 				<input type="submit" value="검색" style="margin-top: 20px;">
@@ -40,31 +46,6 @@
 	<script src="https://www.w3schools.com/lib/w3.js"></script>
 	<script>
 		w3.includeHTML();
-
-		window.onload = async function () {
-			document.getElementById('start').value = "2014-04-05";
-			document.getElementById('end').valueAsDate = new Date();
-			const response = await fetch(window.location.href.replace("games_filter.html", "members"));
-			var json_data = await response.json();
-
-			var this_member = document.getElementById('this_member');
-
-			json_data.forEach(member => {
-				var option = document.createElement('option');
-				option.value = member;
-				option.innerHTML = member;
-				this_member.appendChild(option);
-			});
-
-			var opponent = document.getElementById('opponent');
-
-			json_data.forEach(member => {
-				var option = document.createElement('option');
-				option.value = member;
-				option.innerHTML = member;
-				opponent.appendChild(option);
-			});
-		}
 
 		function w3_open() {
 			document.getElementById("mySidebar").style.display = "block";

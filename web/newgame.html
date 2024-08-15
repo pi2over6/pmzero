@@ -17,6 +17,9 @@
 
         <form method="post" action="/new_game" onsubmit="return validate()">
             <datalist id="members">
+                {% for member in members %}
+                <option> {{member}} </option>
+                {% endfor %}
             </datalist>
             <div class="row">
                 <div class="w3-container w3-cell wind">
@@ -144,19 +147,6 @@
 
         function w3_close() {
             document.getElementById("mySidebar").style.display = "none";
-        }
-
-        window.onload = async function () {
-			const response = await fetch(window.location.href.replace("newgame.html", "members"));
-            var json_data = await response.json();
-
-            var list = document.getElementById('members');
-
-            json_data.forEach(member => {
-                var option = document.createElement('option');
-                option.value = member;
-                list.appendChild(option);
-            });
         }
 
         function getTotal() {

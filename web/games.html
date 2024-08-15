@@ -29,6 +29,34 @@
 					<th nowrap style="border-left: 1px solid black; margin-right: 5px;"></th>
 					<th nowrap>비고</th>
 				</tr>
+				{% for game in games %}
+				<tr>
+					<td nowrap>{{game.recorded_at}}</td>
+					<th nowrap style="
+							border-left: 1px solid black;
+							margin-right: 5px;
+						"></th>
+					<td nowrap>{{game.first}}</td>
+					<td nowrap>{{game.second}}</td>
+					<td nowrap>{{game.third}}</td>
+					<td nowrap>{{game.fourth}}</td>
+					<th nowrap style="
+							border-left: 1px solid black;
+							margin-right: 5px;
+						"></th>
+					<td nowrap>{{game.leftover_score}}</td>
+					<th nowrap style="
+							border-left: 1px solid black;
+							margin-right: 5px;
+						"></th>
+					<td nowrap>{{game.used_dora_count}}</td>
+					<th nowrap style="
+							border-left: 1px solid black;
+							margin-right: 5px;
+						"></th>
+					<td nowrap>{{game.remarks}}</td>
+				</tr>
+				{% endfor %}
 			</table>
 		</div>
 	</div>
@@ -41,48 +69,6 @@
 
 		function w3_close() {
 			document.getElementById("mySidebar").style.display = "none";
-		}
-
-		window.onload = async function () {
-			const response = await fetch(window.location.href.replace(".html", ""));
-			var json_data = await response.json();
-
-			var table = document.getElementById("mainTable");
-
-			json_data.forEach(data_row => {
-				var row = table.insertRow();
-
-				var time = row.insertCell();
-				row.insertCell();
-				var first = row.insertCell();
-				var second = row.insertCell();
-				var third = row.insertCell();
-				var fourth = row.insertCell();
-				row.insertCell();
-				var leftover = row.insertCell();
-				row.insertCell();
-				var dora = row.insertCell();
-				row.insertCell();
-				var remarks = row.insertCell();
-
-				time.innerHTML = data_row['recorded_at'];
-				first.innerHTML = data_row['first'];
-				second.innerHTML = data_row['second'];
-				third.innerHTML = data_row['third'];
-				fourth.innerHTML = data_row['fourth'];
-				leftover.innerHTML = data_row['leftover_score'];
-				dora.innerHTML = data_row['used_dora_count'];
-				remarks.innerHTML = data_row['remarks'];
-
-				time.noWrap = true;
-				first.noWrap = true;
-				second.noWrap = true;
-				third.noWrap = true;
-				fourth.noWrap = true;
-				leftover.noWrap = true;
-				dora.noWrap = true;
-				remarks.noWrap = true;
-			});
 		}
 	</script>
 </body>
