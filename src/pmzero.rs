@@ -158,10 +158,6 @@ pub fn new_game(info: HashMap<String, String>) -> Result<(), Box<dyn Error>> {
         str::parse(&info["northScore"]).unwrap_or(0),
     ];
 
-    if scores.into_iter().sum::<i32>() != 100000 {
-        Err("Sum of scores should be 100000")?
-    }
-
     let game = games::Game {
         id: 0, // will be added inside append_game()
         non_rank_game: info.get("non_rank_game").unwrap_or(&String::from("off")) == "on",

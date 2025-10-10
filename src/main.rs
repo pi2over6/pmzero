@@ -28,7 +28,7 @@ async fn main() -> std::io::Result<()> {
     let path = std::env::var("WEB_PATH").unwrap_or(String::from("web/"));
     let listen = std::env::var("LISTEN").unwrap_or(String::from("localhost:8888"));
 
-    println!("path: {}, listen: {}", path, listen);
+    println!("version: {}", env!("CARGO_PKG_VERSION"));
 
     let app = move || {
         actix_web::App::new()
