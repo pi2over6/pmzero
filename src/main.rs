@@ -9,7 +9,9 @@ use tera::Tera;
 
 lazy_static! {
     pub static ref TERA: Tera = {
-        let mut tera = match Tera::new("web/*.html") {
+        let path = std::env::var("WEB_PATH").unwrap_or(String::from("web/"));
+
+        let mut tera = match Tera::new(&format!("{}*.html", path)) {
             Ok(t) => t,
             Err(e) => {
                 println!("Parsing error(s): {}", e);
@@ -115,7 +117,7 @@ async fn new_game_form() -> impl Responder {
 async fn new_game(info: web::Form<HashMap<String, String>>) -> impl Responder {
     let result = pmzero::new_game(info.into_inner());
     match result {
-        Ok(_) => web::Redirect::to("/games.html").see_other(),
+        Ok(_) => web::Redirect::to("/games").see_other(),
         Err(e) => panic!("{}", e),
     }
 }
@@ -124,7 +126,7 @@ async fn new_game(info: web::Form<HashMap<String, String>>) -> impl Responder {
 async fn new_member(info: web::Form<HashMap<String, String>>) -> impl Responder {
     let result = pmzero::new_member(info.into_inner());
     match result {
-        Ok(_) => web::Redirect::to("/games.html").see_other(),
+        Ok(_) => web::Redirect::to("/new_game").see_other(),
         Err(e) => panic!("{}", e),
     }
 }
