@@ -10,7 +10,7 @@ pub fn members() -> Result<Members, Box<dyn Error>> {
 pub fn append_member(new_member: &str) -> Result<(), Box<dyn Error>> {
     let mut members = db::load_members()?;
 
-    members.insert(members.keys().max().unwrap() + 1, String::from(new_member));
+    members.insert(members.keys().max().copied().unwrap_or(0) + 1, String::from(new_member));
 
     db::save_members(&members)?;
     Ok(())

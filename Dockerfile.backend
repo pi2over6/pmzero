@@ -1,0 +1,29 @@
+FROM rust:1-alpine AS builder
+
+RUN apk add --no-cache build-base musl-dev pkgconfig
+
+WORKDIR /app
+
+COPY Cargo.toml Cargo.lock ./
+COPY src ./src
+
+RUN cargo build --release
+
+FROM alpine:3.20
+
+RUN apk add --no-cache ca-certificates
+
+WORKDIR /app
+
+COPY --from=builder /app/target/release/pmzero /usr/local/bin/pmzero
+COPY web ./web
+
+ENV LISTEN=0.0.0.0:80
+ENV GAMES_PATH=/data/games.json
+ENV MEMBERS_PATH=/data/members.json
+ENV WEB_PATH=/app/web/
+ENV SVELTE_URL=http://frontend:5173
+
+EXPOSE 80
+
+CMD ["/usr/local/bin/pmzero"]

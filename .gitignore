@@ -1,2 +1,6 @@
 /target
 /db
+*.pkg.tar.zst
+/pmzero
+/pkg
+/Caddyfile

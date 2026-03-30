@@ -1,0 +1,20 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    depends_on:
+      - frontend
+    restart: unless-stopped
+    volumes:
+      - ./db:/data
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    environment:
+      BACKEND_ORIGIN: http://backend:80
+    restart: unless-stopped
+    expose:
+      - "5173"

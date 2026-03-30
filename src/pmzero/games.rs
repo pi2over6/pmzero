@@ -12,24 +12,64 @@ pub fn games_filtered(game_filter: HashMap<String, String>) -> Result<Vec<Game>,
         games.retain(|game| !game.non_rank_game);
     }
 
-    if game_filter.contains_key("date") && game_filter["date"] == "on" {
-        let start = NaiveDate::parse_from_str(&game_filter["start"], "%Y-%m-%d")?;
-        let end = NaiveDate::parse_from_str(&game_filter["end"], "%Y-%m-%d")?;
-
+    let start_val = game_filter.get("start").map(|s| s.as_str()).unwrap_or("");
+    let end_val = game_filter.get("end").map(|s| s.as_str()).unwrap_or("");
+    if !start_val.is_empty() || !end_val.is_empty() {
+        let start = if start_val.is_empty() {
+            NaiveDate::from_ymd_opt(1970, 1, 1).unwrap()
+        } else {
+            NaiveDate::parse_from_str(start_val, "%Y-%m-%d")?
+        };
+        let end = if end_val.is_empty() {
+            NaiveDate::from_ymd_opt(9999, 12, 31).unwrap()
+        } else {
+            NaiveDate::parse_from_str(end_val, "%Y-%m-%d")?
+        };
         games.retain(|game| game.in_date(&start, &end));
     }
 
-    if game_filter.contains_key("ind") && game_filter["ind"] == "on" {
-        let member_id = members::get_member_id(&game_filter["this_member"])?;
-        games.retain(|game| game.member_in_game(&member_id));
+    let ind_val = game_filter.get("ind").map(|s| s.as_str()).unwrap_or("");
+    if !ind_val.is_empty() {
+        if let Ok(member_id) = members::get_member_id(&ind_val.to_string()) {
+            games.retain(|game| game.member_in_game(&member_id));
+        }
     }
 
-    if game_filter.contains_key("vs") && game_filter["vs"] == "on" {
-        let opponent_id = members::get_member_id(&game_filter["opponent"])?;
-        games.retain(|game| game.member_in_game(&opponent_id));
+    let vs_val = game_filter.get("vs").map(|s| s.as_str()).unwrap_or("");
+    if !vs_val.is_empty() {
+        if let Ok(opponent_id) = members::get_member_id(&vs_val.to_string()) {
+            games.retain(|game| game.member_in_game(&opponent_id));
+        }
+    }
+
+    let first_min: Option<i32> = game_filter.get("first_min").and_then(|v| v.parse().ok());
+    let first_max: Option<i32> = game_filter.get("first_max").and_then(|v| v.parse().ok());
+    let last_min: Option<i32>  = game_filter.get("last_min").and_then(|v| v.parse().ok());
+    let last_max: Option<i32>  = game_filter.get("last_max").and_then(|v| v.parse().ok());
+    if first_min.is_some() || first_max.is_some() || last_min.is_some() || last_max.is_some() {
+        games.retain(|game| {
+            let mut scores = game.get_only_scores();
+            scores.sort();
+            scores.reverse();
+            let first = scores[0];
+            let last  = scores[3];
+            first_min.map_or(true, |v| first >= v)
+                && first_max.map_or(true, |v| first <= v)
+                && last_min.map_or(true,  |v| last  >= v)
+                && last_max.map_or(true,  |v| last  <= v)
+        });
     }
 
     games.reverse();
+
+    let offset: usize = game_filter.get("offset")
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(0);
+    let limit: usize = game_filter.get("limit")
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(usize::MAX);
+
+    let games = games.into_iter().skip(offset).take(limit).collect();
 
     Ok(games)
 }
@@ -50,7 +90,7 @@ impl db::Game {
     fn in_date(&self, start: &NaiveDate, end: &NaiveDate) -> bool {
         let (game_time, _) =
             &NaiveDate::parse_and_remainder(&self.recorded_at, "%Y-%m-%d").unwrap();
-        start < game_time && game_time < end
+        start <= game_time && game_time <= end
     }
 
     fn member_in_game(&self, member_id: &usize) -> bool {
