@@ -2,6 +2,7 @@
   import type { PageData } from './$types';
   import { postGame, postMember } from '$lib/api';
   import { goto } from '$app/navigation';
+  import { evaluateScoreFormula, formatScoreFormula } from '$lib/score-formula';
 
   let { data }: { data: PageData } = $props();
 
@@ -36,6 +37,10 @@
   function setSw(v: string) { sw = v; }
   function setSn(v: string) { sn = v; }
 
+  function calculateScore(setScore: (v: string) => void, value: string) {
+    setScore(formatScoreFormula(value, 1000));
+  }
+
   const playerRows = $derived<PlayerRow[]>([
     { label: '동', nameVal: east, setName: setEast, scoreVal: se, setScore: setSe, listId: 'members-e' },
     { label: '남', nameVal: south, setName: setSouth, scoreVal: ss, setScore: setSs, listId: 'members-s' },
@@ -60,8 +65,8 @@
   }
 
   const total = $derived(() => {
-    const sum = [se, ss, sw, sn].reduce((acc, v) => acc + (parseFloat(v) || 0), 0);
-    return sum + (parseFloat(leftover) || 0);
+    const sum = [se, ss, sw, sn].reduce((acc, v) => acc + (evaluateScoreFormula(v) ?? 0), 0);
+    return sum + (evaluateScoreFormula(leftover) ?? 0);
   });
 
   const totalOk = $derived(() => Math.abs(total() - 100000) < 0.001);
@@ -101,7 +106,7 @@
     <!-- Players & Scores -->
     <div>
       <div class="flex items-center justify-between mb-2">
-        <span class="text-sm font-medium text-gray-700">자리별 이름 / 점수</span>
+        <span class="text-sm font-medium text-gray-700">자리별 이름 / 점수 <span class="text-xs font-normal text-gray-400">(천점 단위)</span></span>
         <span class="text-sm font-semibold {totalColor()}">합계: {total().toFixed(0)}</span>
       </div>
       <div class="space-y-2">
@@ -117,8 +122,9 @@
             <option value={m}></option>
             {/each}
           </datalist>
-          <input type="number" step="100" value={scoreVal}
+          <input type="text" inputmode="decimal" value={scoreVal}
                  oninput={(e) => setScore((e.target as HTMLInputElement).value)}
+                 onblur={(e) => calculateScore(setScore, (e.target as HTMLInputElement).value)}
                  required placeholder="점수"
                  class="w-24 shrink-0 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#43c1c3]" />
         </div>
@@ -128,8 +134,9 @@
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label for="game-leftover" class="block text-sm font-medium text-gray-700 mb-1">잔여 공탁</label>
-        <input id="game-leftover" type="number" step="100" bind:value={leftover}
+        <label for="game-leftover" class="block text-sm font-medium text-gray-700 mb-1">잔여 공탁 <span class="text-xs font-normal text-gray-400">(천점 단위)</span></label>
+        <input id="game-leftover" type="text" inputmode="decimal" bind:value={leftover}
+               onblur={(e) => leftover = formatScoreFormula((e.target as HTMLInputElement).value, 1000)}
                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#43c1c3]" />
       </div>
       <div>
