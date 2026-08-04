@@ -69,7 +69,7 @@
     return sum + (evaluateScoreFormula(leftover) ?? 0);
   });
 
-  const totalOk = $derived(() => Math.abs(total() - 100000) < 0.001);
+  const totalOk = $derived(() => Math.abs(total()) < 0.001 || Math.abs(total() - 100000) < 0.001);
 
   const totalColor = $derived(() =>
     totalOk() ? 'text-green-600' : 'text-red-500'
@@ -78,7 +78,7 @@
   async function submit(e: SubmitEvent) {
     e.preventDefault();
     error = '';
-    if (!totalOk()) { error = '점수 합계가 100000이어야 합니다.'; return; }
+    if (!totalOk()) { error = '점수 합계가 0 또는 100000이어야 합니다.'; return; }
     sending = true;
     try {
       const ok = await ensureNewMembers([east, south, west, north]);
@@ -107,7 +107,7 @@
     <div>
       <div class="flex items-center justify-between mb-2">
         <span class="text-sm font-medium text-gray-700">자리별 이름 / 점수 <span class="text-xs font-normal text-gray-400">(천점 단위)</span></span>
-        <span class="text-sm font-semibold {totalColor()}">합계: {total().toFixed(0)}</span>
+        <span class="text-sm font-semibold {totalColor()}">합계: {total().toFixed(0)} <span class="font-normal">(100000 - {total().toFixed(0)} = {(100000 - total()).toFixed(0)})</span></span>
       </div>
       <div class="space-y-2">
         {#each playerRows as { label, nameVal, setName, scoreVal, setScore, listId }}
